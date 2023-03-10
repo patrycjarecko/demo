@@ -1,11 +1,16 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "CLIENTS")
+@NoArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +21,12 @@ public class Client {
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
-    public Client(String firstName, String lastName) {
+    @JsonManagedReference
+    @OneToMany(mappedBy="client", fetch=FetchType.LAZY)
+    private List<Car> cars;
+
+    public Client(Long id, String firstName, String lastName) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
